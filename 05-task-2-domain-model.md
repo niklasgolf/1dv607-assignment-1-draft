@@ -1,56 +1,61 @@
-@startuml
-title Laundry Room Booking System - First Domain Model
+# Task 2 - First Domain Model
 
-class Tenant
-class PropertyManager
-class MaintenanceTechnician
-class HousingCompany
-class ApartmentBuilding
-class LaundryRoom
-class Machine
-class WashingMachine
-class Dryer
-class Reservation
-class TimeSlot
-class FaultReport
-class Maintenance
-class MaintenanceSchedule
-class MaintenanceHistory
-class AccessPermission
-class AccessAttempt
-class Notification
+For my first domain model I used the conceptual classes that I selected in Task 1.
 
-HousingCompany "1" -- "*" ApartmentBuilding : manages
-ApartmentBuilding "1" -- "*" Tenant : houses
-ApartmentBuilding "*" -- "*" LaundryRoom : has access to
+I started by looking at how the main concepts could be connected to each other.
 
-LaundryRoom "1" -- "*" Machine : contains
+## Main relationships
 
-Machine <|-- WashingMachine
-Machine <|-- Dryer
+A Tenant lives in an Apartment Building.
 
-Tenant "1" -- "*" Reservation : makes
-LaundryRoom "1" -- "*" Reservation : reserved through
-Reservation "1" -- "1" TimeSlot : uses
+An Apartment Building has access to one or more Laundry Rooms.
 
-Tenant "1" -- "*" FaultReport : creates
-Machine "0..1" -- "*" FaultReport : concerns
-LaundryRoom "0..1" -- "*" FaultReport : concerns
+A Laundry Room contains Machines.
 
-PropertyManager "1" -- "*" MaintenanceSchedule : manages
-MaintenanceSchedule "*" -- "0..1" Machine : concerns
-MaintenanceSchedule "*" -- "0..1" LaundryRoom : concerns
+A Machine can be a Washing Machine or a Dryer.
 
-MaintenanceTechnician "1" -- "*" Maintenance : performs
-Machine "0..1" -- "*" Maintenance : receives
-LaundryRoom "0..1" -- "*" Maintenance : receives
-MaintenanceHistory "1" -- "*" Maintenance : contains
+A Tenant makes Reservations.
 
-Reservation "1" -- "0..1" AccessPermission : provides
-Tenant "1" -- "*" AccessAttempt : makes
-LaundryRoom "1" -- "*" AccessAttempt : receives
+A Reservation is for a Laundry Room and a Time Slot.
 
-Tenant "1" -- "*" Notification : receives
-Reservation "0..1" -- "*" Notification : concerns
+A Tenant can create Fault Reports.
 
-@enduml
+A Fault Report concerns a Machine or a Laundry Room.
+
+A Property Manager manages Maintenance Schedules.
+
+A Maintenance Schedule can concern a Laundry Room or a Machine.
+
+A Maintenance Technician performs Maintenance.
+
+Maintenance can be performed on a Machine or a Laundry Room.
+
+A Reservation can give a Tenant an Access Permission for a Laundry Room.
+
+An Access Attempt is made by a Tenant for a Laundry Room.
+
+Notifications can be sent to a Tenant about a Reservation.
+
+## First thoughts about multiplicities
+
+One Tenant can have many Reservations, but each Reservation belongs to one Tenant.
+
+One Laundry Room can have many Reservations over time, but each Reservation is for one Laundry Room.
+
+One Laundry Room can contain several Machines.
+
+One Apartment Building can have access to one or more Laundry Rooms.
+
+One Tenant can create several Fault Reports.
+
+One Machine or Laundry Room can have several Fault Reports over time.
+
+A Machine or Laundry Room can have several Maintenance records over time.
+
+## First domain model
+
+![First domain model](05-task-2-domain-model.png)
+
+The PlantUML source for the diagram is available in `05-task-2-domain-model.puml`.
+
+This is my first version of the domain model. Some relationships and multiplicities may need to be changed after comparing the model with the requirements again.
